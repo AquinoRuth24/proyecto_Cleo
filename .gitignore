@@ -1,0 +1,3 @@
+# Ignorar los archivos temporales generados por Debugbar y los logs
+writable/debugbar/*
+writable/logs/*

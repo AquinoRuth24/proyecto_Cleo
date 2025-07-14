@@ -1,0 +1,152 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+  /* HERO SECTION */
+.hero {
+    text-align:center;
+    color:#000;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.25rem;
+}
+  /* FOOTER */
+.footer {
+    width: 100%;
+    background-color:#000;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 1rem;
+
+}
+.formulario{
+    background-color: #7a7a7a;
+}
+/*.item-image img {
+    transition: all .6s ease;
+}*/
+
+
+.background {
+background: linear-gradient(to top, #1e0250, #3d1a78);
+background-image: url('../img/WALLPAPER.png');
+background-size: cover;
+background-position: center;
+height: 100vh;
+}
+
+.login-box {
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+width: 100%;
+max-width: 400px;
+}
+
+.input-group-text {
+background: rgba(255, 255, 255, 0.2);
+border: none;
+color: #fff;
+}
+
+.form-control {
+background: transparent;
+border: none;
+border-bottom: 1px solid #ccc;
+}
+
+.form-control::placeholder {
+color: rgba(255, 255, 255, 0.7);
+}
+
+.btn-light {
+font-weight: bold;
+transition: 0.3s;
+}
+
+.btn-light:hover {
+background-color: #ddd;
+color: #000;
+}
+
+.registrar{
+color:#e0e0e0;
+text-align: center;
+background:rgb(37, 3, 68);
+}
+
+.formularioRegistro {       
+border-radius: 1rem;         
+padding: 2rem;               
+background-color:#fff;      
+max-width: 600px;          
+margin: 2rem;
+}
+
+::placeholder {
+    color: #6c757d !important; /* gris Bootstrap */
+    opacity: 1; /* Asegura que el placeholder sea opaco */
+}
+
+.crearProducto{
+background-color:#fff; 
+padding: 20px; 
+border-radius: 10px; 
+box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+margin: 10px auto; 
+max-width: 800px; 
+margin-left: 60;    
+margin-right: auto;    
+}
+
+.catalogo{
+background-color:#053f75;
+text-align: center;
+}
+
+.gracias-container {
+max-width: 700px;
+margin: 60px auto;
+padding: 40px;
+border-radius: 10px;
+background: #f9f9f9;
+box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+text-align: center;
+}
+
+.gracias-container img {
+max-width: 250px;
+margin-bottom: 25px;
+}
+
+.gracias-container p {
+font-size: 1.1rem;
+color: #333;
+}
+
+.gracias-container a {
+text-decoration: none;
+color: #fff;
+}
+
+.info{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 1.2rem;
+}
