@@ -61,6 +61,16 @@ class ConsultaController extends BaseController
             }
 
             if ($this->ConsultaModel->insert($data)) {
+                $destinatario = session()->get('isLoggedIn') ? session()->get('email') : $data['email'];
+                $nombre = session()->get('isLoggedIn') ? session()->get('nombre') : $data['nombre'];
+
+                $mensajeCorreo = "
+        <p>Hola <strong>{$nombre}</strong>,</p>
+        <p>Gracias por comunicarte con nosotros. Hemos recibido tu consulta y te responderemos a la brevedad.</p>
+        <p>Atentamente,<br>Equipo de Cleo</p>
+    ";
+
+                $this->enviarCorreo($destinatario, 'Confirmación de consulta - Cleo', $mensajeCorreo);
                 session()->setFlashdata('mensaje', 'Consulta enviada correctamente.');
             } else {
                 session()->setFlashdata('mensaje', 'Error al enviar la consulta. Intenta nuevamente.');
@@ -129,6 +139,14 @@ class ConsultaController extends BaseController
         }
 
         $consulta = $this->ConsultaModel->find($id);
+        $mensajeCorreo = "
+    <p>Hola <strong>{$consulta['nombre']}</strong>,</p>
+    <p>Hemos respondido tu consulta:</p>
+    <blockquote style='border-left: 4px solid #ccc; padding-left: 10px;'>{$consulta['respuesta']}</blockquote>
+    <p>Gracias por contactarte con Cleo.</p>
+";
+
+        $this->enviarCorreo($consulta['email'], 'Respuesta a tu consulta - Cleo', $mensajeCorreo);
 
         return view('pages/admin/responder_consulta', [
             'title' => 'Responder Consulta',
@@ -152,5 +170,16 @@ class ConsultaController extends BaseController
                 'email' => $email
             ]);
         }
+    }
+    private function enviarCorreo($destinatario, $asunto, $mensaje)
+    {
+        $email = \Config\Services::email();
+
+        $email->setTo($destinatario);
+        $email->setFrom('ruthaquino100@gmail.com', 'Cleo Web');
+        $email->setSubject($asunto);
+        $email->setMessage($mensaje);
+
+        return $email->send();
     }
 }

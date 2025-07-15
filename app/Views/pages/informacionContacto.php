@@ -1,5 +1,4 @@
 <section class="hero">
-    <!-- encabezado de la seccion -->
     <h1>Información de Contacto</h1>
     <div class="info">
         <ul class="list-unstyled">
@@ -12,16 +11,15 @@
 <div class="container mt-4">
     <div class="row g-4">
 
-        <!-- Donde encontrarnos -->
         <div class="col-md-6">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><strong>Donde Encontrarnos!</strong></h5>
                     <ul class="list-unstyled">
                         <li>📍🌍Direccion fisica:</li>
-                        <li style="padding-left: 2rem;">9 de julio 1453,Corrientes,Corrientes,Argentina</li>
+                        <li style="padding-left: 2rem;">Entre las avenidas La Paz y Bariloche,Corrientes,Corrientes,Argentina</li>
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3540.0845020903835!2d-58.832228300000004!3d-27.4666285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94456ca6d2fe84f1%3A0x50733ca264735ee3!2s9%20de%20Julio%201453%2C%20W3400AZB%20Corrientes!5e0!3m2!1ses-419!2sar!4v1745638597802!5m2!1ses-419!2sar"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3539.307795686855!2d-58.828155826144965!3d-27.49080151760266!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94456b0a02186bb9%3A0x6cdc1aa114a73e94!2sColegio%20Secundario%20Dr.%20Luis%20Federico%20Leloir!5e0!3m2!1ses-419!2sar!4v1752533727121!5m2!1ses-419!2sar"
                             width="400" height="200" style="border:0;" allowfullscreen="" loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade">
                         </iframe>
@@ -36,11 +34,11 @@
                     <h5 class="card-title"><strong>¿Cómo contactarnos?</strong></h5>
                     <ul class="list-unstyled">
                         <li style="margin-top: 1rem;"> <img src="assets/img/instagram.jpg" alt="Instagram"
-                                height="40">Instagram: <a href="https://www.instagram.com/yesi_yohi.store"
-                                target="_blank">@yesi_yohi.store</a></li>
-                        <li style="margin-top: 1rem;">Contacto: Bareiro Angel Andres:</li>
+                                height="40">Instagram: <a href="https://www.instagram.com/cleo.bisuteriaa?igsh=Z2RmMzM4ZXI3bHB5"
+                                target="_blank">@cleo</a></li>
+                        <li style="margin-top: 1rem;">Contacto: Aquino Belen:</li>
                         <li style="padding-left: 2rem;"><img src="assets/img/logoWpp.jpg" alt="Whatsapp"
-                                height="40">: <a href="tel:+54 9 3795-103530">+54 9 3795-103530</a></li>
+                                height="40">: <a href="tel:+54 9 3795-103530">+54 9 379 530-8583</a></li>
                         <li>📧Email: <a href="mailto:andres.bareiro@outlook.com">andres.bareiro@outlook.com</a></li>
                         <li style="margin-top: 1rem;">Contacto: Aquino Ruth:</li>
                         <li style="padding-left: 2rem;"><img src="assets/img/logoWpp.jpg" alt="Whatsapp"
