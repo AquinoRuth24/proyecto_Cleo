@@ -30,55 +30,74 @@ class ConsultaController extends BaseController
     }
 
 
-    public function enviar()
-    {
-        if ($this->request->getMethod() === 'POST') {
-            $data = [
-                'mensaje' => $this->request->getPost('mensaje'),
-                'fecha_envio' => date('Y-m-d H:i:s'),
-                'contestado' => 0
-            ];
+public function enviar()
+{
+    if ($this->request->getMethod() === 'POST') {
+        $data = [
+            'mensaje' => $this->request->getPost('mensaje'),
+            'fecha_envio' => date('Y-m-d H:i:s'),
+            'contestado' => 0
+        ];
 
-            if (session()->get('isLoggedIn')) {
-                $userId = session()->get('user_id');
+        if (session()->get('isLoggedIn')) {
+            $userId = session()->get('user_id');
 
-                // Validar que sea un ID existente
-                if (!empty($userId) && is_numeric($userId)) {
-                    $data['id_usuario'] = $userId;
-                }
-            } else {
-                // Para usuarios no registrados: nombre y email
-                $nombre = $this->request->getPost('nombre');
-                $email  = $this->request->getPost('email');
+            if (!empty($userId) && is_numeric($userId)) {
+                $data['id_usuario'] = $userId;
+            }
+        } else {
+            $nombre = $this->request->getPost('nombre');
+            $email  = $this->request->getPost('email');
 
-                if (empty($nombre) || empty($email)) {
-                    session()->setFlashdata('mensaje', 'Nombre y email son obligatorios para enviar la consulta.');
-                    return redirect()->to('/consultas');
-                }
-
-                $data['nombre'] = $nombre;
-                $data['email']  = $email;
+            if (empty($nombre) || empty($email)) {
+                session()->setFlashdata('mensaje', 'Nombre y email son obligatorios para enviar la consulta.');
+                return redirect()->to('/consultas');
             }
 
-            if ($this->ConsultaModel->insert($data)) {
-                $destinatario = session()->get('isLoggedIn') ? session()->get('email') : $data['email'];
-                $nombre = session()->get('isLoggedIn') ? session()->get('nombre') : $data['nombre'];
-
-                $mensajeCorreo = "
-        <p>Hola <strong>{$nombre}</strong>,</p>
-        <p>Gracias por comunicarte con nosotros. Hemos recibido tu consulta y te responderemos a la brevedad.</p>
-        <p>Atentamente,<br>Equipo de Cleo</p>
-    ";
-
-                $this->enviarCorreo($destinatario, 'Confirmación de consulta - Cleo', $mensajeCorreo);
-                session()->setFlashdata('mensaje', 'Consulta enviada correctamente.');
-            } else {
-                session()->setFlashdata('mensaje', 'Error al enviar la consulta. Intenta nuevamente.');
-            }
+            $data['nombre'] = $nombre;
+            $data['email']  = $email;
         }
 
-        return redirect()->to('/consultas');
+        if ($this->ConsultaModel->insert($data)) {
+            $destinatario = session()->get('isLoggedIn') && session()->get('email')
+                ? session()->get('email')
+                : ($data['email'] ?? null);
+
+            $nombre = session()->get('isLoggedIn') && session()->get('nombre')
+                ? session()->get('nombre')
+                : ($data['nombre'] ?? 'Usuario');
+
+            // Correo para el usuario
+            $mensajeCorreo = "
+                <p>Hola <strong>{$nombre}</strong>,</p>
+                <p>Gracias por comunicarte con nosotros. Hemos recibido tu consulta y te responderemos a la brevedad.</p>
+                <p>Atentamente,<br>Equipo de Cleo</p>
+            ";
+            $this->enviarCorreo($destinatario, 'Confirmación de consulta - Cleo', $mensajeCorreo);
+
+            // Correo para el administrador
+            $mensajeAdmin = "
+                <p><strong>{$nombre}</strong> ha enviado una consulta desde Cleo.</p>
+                <p><strong>Email:</strong> {$destinatario}</p>
+                <p><strong>Mensaje:</strong></p>
+                <blockquote>{$data['mensaje']}</blockquote>
+                <p>
+                    <a href='mailto:{$destinatario}?subject=Respuesta%20a%20tu%20consulta%20en%20Cleo' 
+                    style='display:inline-block;padding:10px 15px;background:#28a745;color:#fff;text-decoration:none;border-radius:5px;'>
+                        Responder por correo
+                    </a>
+                </p>
+            ";
+            $this->enviarCorreo('Cleobisuteria7@gmail.com', 'Nueva consulta recibida', $mensajeAdmin);
+
+            session()->setFlashdata('mensaje', 'Consulta enviada correctamente.');
+        } else {
+            session()->setFlashdata('mensaje', 'Error al enviar la consulta. Intenta nuevamente.');
+        }
     }
+
+    return redirect()->to('/consultas');
+}
 
     public function misConsultas()
     {
@@ -127,6 +146,15 @@ class ConsultaController extends BaseController
     }
     public function responder($id)
     {
+        $consulta = $this->ConsultaModel->find($id);
+
+        if (!empty($consulta['id_usuario'])) {
+            $usuarioModel = new \App\Models\UsuarioModel();
+            $usuario = $usuarioModel->find($consulta['id_usuario']);
+            $consulta['nombre'] = $usuario['nombre'] ?? 'Cliente';
+            $consulta['email'] = $usuario['email'] ?? '';
+        }
+
         if ($this->request->getMethod() === 'POST') {
             $respuesta = $this->request->getPost('respuesta');
 
@@ -135,18 +163,18 @@ class ConsultaController extends BaseController
                 'contestado' => 1
             ]);
 
+            $mensajeCorreo = "
+            <p>Hola <strong>{$consulta['nombre']}</strong>,</p>
+            <p>Hemos respondido tu consulta:</p>
+            <blockquote style='border-left: 4px solid #ccc; padding-left: 10px;'>{$respuesta}</blockquote>
+            <p>Gracias por contactarte con Cleo.</p>";
+
+            if (!empty($consulta['email'])) {
+                $this->enviarCorreo($consulta['email'], 'Respuesta a tu consulta - Cleo', $mensajeCorreo);
+            }
+
             return redirect()->to(site_url('admin/consultas'))->with('mensaje', 'Consulta respondida correctamente.');
         }
-
-        $consulta = $this->ConsultaModel->find($id);
-        $mensajeCorreo = "
-    <p>Hola <strong>{$consulta['nombre']}</strong>,</p>
-    <p>Hemos respondido tu consulta:</p>
-    <blockquote style='border-left: 4px solid #ccc; padding-left: 10px;'>{$consulta['respuesta']}</blockquote>
-    <p>Gracias por contactarte con Cleo.</p>
-";
-
-        $this->enviarCorreo($consulta['email'], 'Respuesta a tu consulta - Cleo', $mensajeCorreo);
 
         return view('pages/admin/responder_consulta', [
             'title' => 'Responder Consulta',
@@ -173,13 +201,22 @@ class ConsultaController extends BaseController
     }
     private function enviarCorreo($destinatario, $asunto, $mensaje)
     {
-        $email = \Config\Services::email();
+        if (empty($destinatario) || !filter_var($destinatario, FILTER_VALIDATE_EMAIL)) {
+            log_message('error', 'Error: destinatario inválido o vacío → ' . var_export($destinatario, true));
+            return false;
+        }
 
+        $email = \Config\Services::email();
         $email->setTo($destinatario);
-        $email->setFrom('ruthaquino100@gmail.com', 'Cleo Web');
+        $email->setFrom('Cleobisuteria7@gmail.com', 'Cleo Web');
         $email->setSubject($asunto);
         $email->setMessage($mensaje);
 
-        return $email->send();
+        if (!$email->send()) {
+            log_message('error', ' Error al enviar correo: ' . $email->printDebugger(['headers', 'subject', 'body']));
+            return false;
+        }
+
+        return true;
     }
 }
