@@ -56,6 +56,8 @@ $routes->get('/producto/eliminarProducto/(:num)', 'ProductoController::eliminarP
 $routes->get('/producto/productosEliminados', 'ProductoController::productosEliminados');
 $routes->get('/producto/restaurarProducto/(:num)', 'ProductoController::restaurarProducto/$1');
 $routes->match(['get', 'post'], '/producto/editarProducto/(:num)', 'ProductoController::editarProducto/$1');
+$routes->get('producto/editarStock/(:num)', 'ProductoController::editarStock/$1');
+$routes->post('producto/actualizarStock/(:num)', 'ProductoController::actualizarStock/$1');
 
 // ventas
 $routes->get('admin/ventas', 'AdministradorController::ventas');
@@ -63,7 +65,7 @@ $routes->get('admin/facturas', 'AdministradorController::facturas');
 
 // Categorías
 $routes->get('catalogoProductos', 'CatalogoController::index');
-
+$routes->get('subcategorias/(:num)', 'SubcategoriaController::obtenerPorCategoria/$1');
 // carrito de compras
 $routes->get('carrito', 'CarritoController::ver');
 $routes->get('carrito/agregar/(:num)', 'CarritoController::agregar/$1');
@@ -76,4 +78,4 @@ $routes->get('pages/gracias', 'CarritoController::gracias');
 $routes->get('mi-historial', 'CarritoController::historial');
 $routes->post('carrito/terminarCompra', 'CarritoController::terminarCompra');
 $routes->get('admin/registrar-venta', 'AdministradorController::registrarVenta');
-$routes->get('subcategorias/(:num)', 'SubcategoriaController::obtenerPorCategoria/$1');
+

@@ -23,6 +23,7 @@
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
+                <th>Imagen</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -31,6 +32,13 @@
                 <tr>
                     <td><?= $producto['id_producto'] ?></td>
                     <td><?= esc($producto['nombre']) ?></td>
+                    <td>
+                        <?php if (!empty($imagenes[$producto['id_producto']])): ?>
+                            <img src="<?= base_url('/productos/img/' . $imagenes[$producto['id_producto']][0]) ?>" width="50" class="rounded">
+                        <?php else: ?>
+                            <span class="text-muted">Sin imagen</span>
+                        <?php endif ?>
+                    </td>
                     <td>
                         <a href="<?= site_url('producto/restaurarProducto/' . $producto['id_producto']) ?>" class="btn btn-success btn-sm">Restaurar</a>
                     </td>

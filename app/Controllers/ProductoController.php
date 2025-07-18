@@ -19,7 +19,9 @@ class ProductoController extends Controller
         $ProductoModel = new ProductoModel();
         $ImagenModel = new ImagenModel();
 
-        $productos = $ProductoModel->where('activo', 1)->findAll();
+        $productos = $ProductoModel
+            ->where('activo', 1)
+            ->findAll();
         $imagenes = [];
 
         foreach ($productos as &$producto) {
@@ -239,5 +241,25 @@ class ProductoController extends Controller
         $ProductoModel->update($id, ['activo' => 1]);
 
         return redirect()->to('producto')->with('success', 'Producto restaurado');
+    }
+    public function editarStock($id)
+    {
+        $productoModel = new ProductoModel();
+        $producto = $productoModel->find($id);
+
+        if (!$producto) {
+            return redirect()->to('producto')->with('error', 'Producto no encontrado.');
+        }
+
+        return view('pages/productos/editarStock', ['producto' => $producto]);
+    }
+    public function actualizarStock($id)
+    {
+        $productoModel = new ProductoModel();
+        $nuevoStock = $this->request->getPost('stock');
+
+        $productoModel->update($id, ['stock' => $nuevoStock]);
+
+        return redirect()->to('producto')->with('message', 'Stock actualizado correctamente.');
     }
 }

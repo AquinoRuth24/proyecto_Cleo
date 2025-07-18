@@ -26,7 +26,8 @@ class CatalogoController extends BaseController
         $builder = $ProductoModel
             ->select('productos.*, imagen.url_imagen')
             ->join('imagen', 'imagen.id_producto = productos.id_producto AND imagen.es_principal = 1', 'left')
-            ->where('productos.activo', 1);
+            ->where('productos.activo', 1)
+            ->where('productos.stock >', 0);
 
         if ($nombre) {
             $builder->like('productos.nombre', $nombre);

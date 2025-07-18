@@ -48,7 +48,7 @@
         </div>
     </div>
 </nav>
-<!-- Estilos DataTables -->
+
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <?php if (session()->getFlashdata('success')): ?>
     <div class="alert alert-success">
@@ -93,6 +93,7 @@
                     <td>
                         <a href="<?= site_url('producto/editarProducto/' . $producto['id_producto']) ?>" class="btn btn-sm btn-primary">Editar</a>
                         <a href="<?= site_url('producto/eliminarProducto/' . $producto['id_producto']) ?>" class="btn btn-sm btn-secondary">Borrar</a>
+                        <a href="<?= site_url('producto/editarStock/' . $producto['id_producto']) ?>" class="btn btn-sm btn-primary">Agregar Stock</a>
                     </td>
                 </tr>
             <?php endforeach ?>
