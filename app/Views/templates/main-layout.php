@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?></title>
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/miestilo.css">
+    <link href="<?= base_url('assets/css/bootstrap.min.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/css/miestilo.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="icon" href="assets/img/logo.jpg" type="image/x-icon">
+    <link rel="icon" href="<?= base_url('assets/img/logo.jpg') ?>" type="image/x-icon">
 </head>
 
 <body>
@@ -32,7 +32,7 @@
 
     </div>
 
-    <script src="assets/js/bootstrap.js"></script>
+    <script src="<?= base_url('assets/js/bootstrap.js') ?>"></script>
 
 </body>
 

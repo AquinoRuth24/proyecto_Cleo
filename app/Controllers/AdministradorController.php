@@ -40,10 +40,8 @@ class AdministradorController extends BaseController
         $ProductoModel = new \App\Models\ProductoModel();
         $UsuarioModel = new \App\Models\UsuarioModel();
 
-        // Trae todas las ventas (cabeceras de factura)
+        // Trae todas las ventas
         $ventas = $CabeceraModel->orderBy('fecha_creacion', 'DESC')->findAll();
-
-        // Por cada cabecera, busca el usuario y los productos facturados
         foreach ($ventas as &$venta) {
             $venta['usuario'] = $UsuarioModel->find($venta['id_usuario']);
 
@@ -80,11 +78,9 @@ class AdministradorController extends BaseController
             $builder = $builder->where('DATE(fecha_creacion)', $fecha);
         }
 
-
         if (!empty($cliente)) {
             $builder = $builder->where('id_usuario', $cliente);
         }
-
 
         $cabeceras = $builder->orderBy('fecha_creacion', 'DESC')->findAll();
 

@@ -94,7 +94,7 @@
     <?php foreach ($cabeceras as $cabecera): ?>
         <div class="card mb-4 shadow-sm border-light">
             <div class="card-header bg-dark text-white">
-                Factura N° <?= $cabecera['id_cabecera'] ?> | Usuario: <?= $cabecera['usuario']['usuario'] ?? 'Desconocido' ?> | Fecha: <?= date('d/m/Y H:i', strtotime($cabecera['fecha_creacion'])) ?>
+                Factura N° <?= $cabecera['id_cabecera'] ?> | Usuario: <?= $cabecera['usuario']['nombre'] . ' ' . $cabecera['usuario']['apellido'] ?? 'Desconocido' ?> | Fecha: <?= date('d/m/Y H:i', strtotime($cabecera['fecha_creacion'])) ?>
             </div>
             <div class="card-body bg-light p-0">
                 <div class="table-responsive">

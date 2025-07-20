@@ -62,6 +62,8 @@ $routes->post('producto/actualizarStock/(:num)', 'ProductoController::actualizar
 // ventas
 $routes->get('admin/ventas', 'AdministradorController::ventas');
 $routes->get('admin/facturas', 'AdministradorController::facturas');
+$routes->get('factura/ver/(:num)', 'UsuarioController::verFactura/$1');
+$routes->get('mis-facturas', 'UsuarioController::misFacturas');
 
 // Categorías
 $routes->get('catalogoProductos', 'CatalogoController::index');
@@ -70,8 +72,6 @@ $routes->get('subcategorias/(:num)', 'SubcategoriaController::obtenerPorCategori
 $routes->get('carrito', 'CarritoController::ver');
 $routes->get('carrito/agregar/(:num)', 'CarritoController::agregar/$1');
 $routes->get('carrito/eliminar/(:num)', 'CarritoController::eliminar/$1');
-$routes->get('mis-facturas', 'UsuarioController::misFacturas');
-
 
 $routes->get('carrito/vaciar', 'CarritoController::vaciar');
 $routes->get('pages/gracias', 'CarritoController::gracias');

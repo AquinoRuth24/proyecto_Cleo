@@ -104,54 +104,59 @@ class CarritoController extends Controller
         ]);
     }
     public function terminarCompra()
-    {
-        if (!session()->get('isLoggedIn')) {
-            return redirect()->to('/login')->with('error', 'Debés iniciar sesión para finalizar la compra.');
-        }
-
-        $carrito = $this->session->get('carrito');
-
-        if (empty($carrito)) {
-            return redirect()->to('/carrito')->with('error', 'El carrito está vacío.');
-        }
-
-        $idUsuario = session()->get('user_id');
-        $CabeceraModel = new \App\Models\CabeceraModel();
-        $FacturaModel = new \App\Models\FacturaModel();
-        $ProductoModel = new \App\Models\ProductoModel();
-
-        $total = 0;
-        foreach ($carrito as $item) {
-            $total += $item['precio'] * $item['cantidad'];
-        }
-
-        $idCabecera = $CabeceraModel->insert([
-            'id_usuario' => $idUsuario,
-            'fecha_creacion' => date('Y-m-d H:i:s'),
-            'precio_total' => $total
-        ], true); // true para retornar el ID
-
-        foreach ($carrito as $item) {
-            $FacturaModel->insert([
-                'id_producto' => $item['id'],
-                'cantidad' => $item['cantidad'],
-                'precio_unitario' => $item['precio'],
-                'descuento' => 0,
-                'subtotal' => $item['precio'] * $item['cantidad'],
-                'id_cabecera' => $idCabecera
-            ]);
-
-            $producto = $ProductoModel->find($item['id']);
-            if ($producto) {
-                $nuevoStock = $producto['stock'] - $item['cantidad'];
-                $ProductoModel->update($item['id'], ['stock' => $nuevoStock]);
-            }
-        }
-
-        $this->session->remove('carrito');
-
-        return view('pages/gracias', [
-            'title' => 'Gracias por su compra',
-        ]);
+{
+    if (!session()->get('isLoggedIn')) {
+        return redirect()->to('/login')->with('error', 'Debés iniciar sesión para finalizar la compra.');
     }
+
+    $carrito = $this->session->get('carrito');
+
+    if (empty($carrito)) {
+        return redirect()->to('/carrito')->with('error', 'El carrito está vacío.');
+    }
+
+    $idUsuario = session()->get('user_id');
+    $CabeceraModel = new \App\Models\CabeceraModel();
+    $FacturaModel = new \App\Models\FacturaModel();
+    $ProductoModel = new \App\Models\ProductoModel();
+
+    $idCabecera = $CabeceraModel->insert([
+        'id_usuario' => $idUsuario,
+        'fecha_creacion' => date('Y-m-d H:i:s'),
+        'precio_total' => 0
+    ], true);
+
+    foreach ($carrito as $item) {
+        $subtotal = $item['precio'] * $item['cantidad'];
+
+        $FacturaModel->insert([
+            'id_producto' => $item['id'],
+            'cantidad' => $item['cantidad'],
+            'precio_unitario' => $item['precio'],
+            'descuento' => 0,
+            'subtotal' => $subtotal,
+            'id_cabecera' => $idCabecera
+        ]);
+
+        $producto = $ProductoModel->find($item['id']);
+        if ($producto) {
+            $nuevoStock = $producto['stock'] - $item['cantidad'];
+            $ProductoModel->update($item['id'], ['stock' => $nuevoStock]);
+        }
+    }
+
+    $facturas = $FacturaModel->where('id_cabecera', $idCabecera)->findAll();
+    $total = 0;
+    foreach ($facturas as $factura) {
+        $total += $factura['subtotal'];
+    }
+
+    $CabeceraModel->update($idCabecera, ['precio_total' => $total]);
+
+    $this->session->remove('carrito');
+
+    return view('pages/gracias', [
+        'title' => 'Gracias por su compra',
+    ]);
+}
 }

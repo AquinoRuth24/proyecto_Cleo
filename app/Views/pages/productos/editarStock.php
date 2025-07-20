@@ -29,3 +29,5 @@
     <button type="submit" class="btn btn-success">Actualizar Stock</button>
     </div>
 </form>
+
+<script src="<?= base_url('assets/js/bootstrap.js') ?>"></script>

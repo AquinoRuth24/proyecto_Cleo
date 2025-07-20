@@ -21,12 +21,9 @@ class UsuarioController extends Controller
         $password = $request->getPost('password');
         $confirmar = $request->getPost('confirmar_password');
 
-        // Validar contraseñas iguales
         if ($password !== $confirmar) {
             return redirect()->back()->withInput()->with('error', 'Las contraseñas no coinciden.');
         }
-
-        // Validar email duplicado
         $UsuarioModel = new UsuarioModel();
         if ($UsuarioModel->where('email', $email)->first()) {
             return redirect()->back()->withInput()->with('error', 'Este correo ya está registrado.');
@@ -154,5 +151,48 @@ class UsuarioController extends Controller
             'title' => 'Mis Facturas',
             'facturas' => $facturas
         ]);
+        
     }
+    public function verFactura($idFactura)
+{
+    if (!session()->get('isLoggedIn')) {
+        return redirect()->to('/login')->with('error', 'Debés iniciar sesión para ver tus facturas.');
+    }
+
+    $idUsuario = session()->get('user_id');
+    $CabeceraModel = new \App\Models\CabeceraModel();
+    $FacturaModel = new \App\Models\FacturaModel();
+    $ProductoModel = new \App\Models\ProductoModel();
+
+    $factura = $CabeceraModel
+        ->where('id_usuario', $idUsuario)
+        ->where('id_cabecera', $idFactura)
+        ->first();
+
+    if (!$factura) {
+        return redirect()->to('/mis-facturas')->with('error', 'Factura no encontrada.');
+    }
+
+    $db = \Config\Database::connect();
+    $detalles = $db->table('factura')
+        ->select('factura.*, productos.nombre as nombre_producto, imagen.url_imagen')
+        ->join('productos', 'productos.id_producto = factura.id_producto', 'left')
+        ->join('imagen', 'imagen.id_producto = productos.id_producto AND imagen.es_principal = 1', 'left')
+        ->where('factura.id_cabecera', $idFactura)
+        ->get()
+        ->getResultArray();
+
+    $total = 0;
+    foreach ($detalles as $detalle) {
+        $total += $detalle['subtotal'];
+    }
+
+    return view('pages/detalle-factura', [
+        'title' => 'Detalle Factura',
+        'factura' => $factura,
+        'detalles' => $detalles,
+        'total' => $total 
+    ]);
+}
+
 }

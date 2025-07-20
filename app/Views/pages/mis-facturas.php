@@ -21,10 +21,17 @@
                         <td><?= $compra['id_cabecera'] ?></td>
                         <td><?= $compra['fecha_creacion'] ?></td>
                         <td>$<?= number_format($compra['precio_total'], 2) ?></td>
+                        <td>
+                            <a href="<?= site_url('factura/ver/' . $compra['id_cabecera']) ?>"
+                                class="btn btn-sm btn-primary">
+                                Ver Detalle
+                            </a>
+                        </td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
         </table>
     <?php endif ?>
 </div>
+<script src="<?= base_url('assets/js/bootstrap.js') ?>"></script>
 <?= $this->endSection() ?>
