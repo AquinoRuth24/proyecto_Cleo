@@ -135,19 +135,6 @@ class Home extends BaseController
         $email = $this->request->getPost('email');
         $telefono = $this->request->getPost('telefono');
         $mensaje = $this->request->getPost('mensaje');
-
-        // Acá podrías guardar el mensaje en la base de datos o enviarlo por email
-        // Ejemplo de guardar en la tabla 'mensajes':
-        /*
-    $contactoModel = new \App\Models\ContactoModel();
-    $contactoModel->save([
-        'nombre' => $nombre,
-        'email' => $email,
-        'telefono' => $telefono,
-        'mensaje' => $mensaje,
-    ]);
-    */
-
         return redirect()->back()->with('mensaje', '¡Gracias por tu consulta! Te responderemos pronto.');
     }
 }
